@@ -1,0 +1,100 @@
+{% extends 'UserDashboardTemplate.html'%}
+{% block content %}
+<style>
+    #appliance-page-container {
+        height: 800px; /* Total height of the container */
+        background-color: white;
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+    }
+    
+    #top-section {
+        height: 15%; /* 1/4 of the container */
+        border-bottom: 3px solid gray;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #chart-section {
+        height: 105%; /* 3/4 of the container */
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+</style>
+<div id="appliance-page-container" style="height: 700px; background-color: white;">
+    <!-- Top Section -->
+    <div id="top-section" style="height: 10%;">
+        <div class="labels">
+            <ul>
+                <div class="label-item">
+                    <li>
+                        <div class="label-text">
+                            TOTAL KWH POWER PRODUCED/WEEK
+                        </div>
+                        <div class="percentage" style="color: rgb(12, 241, 115);font-size:30px;">{{sum_greenenergydata}} KWH</div>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <!-- Chart Section -->
+    <div id="chart-section" style="height: 90%; background-color: white; display: flex; align-items: center; justify-content: center;">
+        <canvas id="greenEnBarChart"></canvas>
+    </div>
+</div>
+<script>
+    window.onload = function() {
+        renderGreenEnCharts();      
+    };
+
+    function renderGreenEnCharts() {
+        const xValues = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY','FRIDAY','SATURDAY', 'SUNDAY'];
+        const yValues1 = {{ greenenergydata | tojson }}
+    
+        new Chart("greenEnBarChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: [
+                    {
+                        label: "Green Energy in KWH",
+                        data: yValues1,
+                        backgroundColor: "rgb(12, 241, 115,0.7)", // Green color
+                        borderColor: "rgba(48,185,56,1)",
+                        borderWidth: 1,
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // Prevent distortion during resizing
+                plugins: {
+                    legend: {
+                        display: true, // Ensure the legend is displayed
+                        position: "top", // Position of the legend
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: false, // Change to true if you want stacked bars
+                    },
+                    y: {
+                        stacked: false, // Change to true if you want stacked bars
+                        ticks: {
+                            min: 0,
+                            max: 20,
+                        },
+                    },
+                },
+            },
+        });
+    }    
+</script>
+{% endblock %}

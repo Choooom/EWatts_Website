@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/AdminDashTemplateStyle.css">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/logo/favicon.ico') }}">
+    <title>Admin Dasboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+        .topdiv {
+            width: 100%;
+            height: 10vh;
+            background-color: transparent;
+            margin: 10px;
+            margin-top: 25px;
+            display: flex;
+            gap: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .welcome h1{
+            color: #ffff;
+            padding: 0;
+            margin: 0;
+        }
+        .date-time{
+            display: flex;
+            flex-direction: row;
+            margin-top: -2em;
+            padding: 0;
+            gap: 10px;
+            color: #ffff;
+        }
+        #date, #time{
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        .statistics {
+            width: 98.3%;
+            height: 70vh;
+            background-color: transparent;
+            margin: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .user-estimation,
+        .Emissions {
+            width:35%;
+            height: 100%;
+            background-color: #002c4c;
+            border-radius: 20px;
+            gap: 10px;
+        }
+        
+        .user-estimation {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 10px;
+        }
+        
+        .total-users,
+        .Cost-Emission{
+            height: 50%;
+            width: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .Emissions {
+            width: 65%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+        }
+        
+        .Energy-Emission,
+        .Carbon-Emission {
+            width: 50%;
+            height: 100%;
+            background-color: #ffff;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #myPieChart, 
+        #myDoughnutChart,
+        #myGreenChart,
+        #myCarbonChart {
+            width: 73% !important; /* Adjust based on your layout */
+            margin-left: 0 !important;
+            height: 60% !important; /* Adjust based on your layout */
+            margin: 0 !important;
+            padding-bottom: 5px;
+        }
+        
+        .labels ul {
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            padding: 0;
+            margin-top: 1em;
+            position: relative;
+            bottom: 15%;
+        }
+        
+        .label-item {
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+        
+        .label-item li {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            font-size: 15px;
+            margin: 0;
+        }
+        
+        .bullet {
+            font-size: 20px;
+            padding-right: 5px;
+        }
+        
+        .orange {
+            color: #F4BE37;
+        }
+        
+        .blue {
+            color: #FF9F40;
+        }
+        
+        .orange-red {
+            color: #0D2535;
+        }
+        
+        .red {
+            color: #5388D8;
+        }
+        
+        .percentage {
+            font-weight: bold;
+            font-size: 15px;
+            padding-left: 5px;
+        }
+        #App-sect, #Cost-sect{
+            margin-right: 20em;
+        }
+        #emit{
+            height: 19px;
+            margin: 19px;
+            padding: 0;
+            margin-left: 10px;
+        }
+        .total-users-card {
+            width: 300px;
+            padding: 20px;
+            background: linear-gradient(145deg, #e0f7dc, #c9e8c3);
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1), -5px -5px 10px rgba(255, 255, 255, 0.5);
+            border-radius: 15px;
+            text-align: center;
+        }
+        
+        .total-users-card .card-header h3 {
+            font-size: 1.5rem;
+            color: #48a14d;
+            margin: 0;
+            font-weight: bold;
+        }
+        
+        .total-users-card .card-body h1 {
+            font-size: 3rem;
+            color: #2e7d32;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        .total-users-card .card-body p {
+            font-size: 1rem;
+            color: #6c757d;
+            margin: 0;
+            font-style: italic;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <div class="Container">
+        <div class="Side-Navigation">
+            <img id="sidetopimg" src="../static/images/png/sideimg2.png" alt="">
+
+            <div class="logo-div">
+                <div class="img-logo">
+                    <img src="../static/images/logo/logo.svg" alt="">
+                </div>
+                <div class="webname">
+                    <h2><span id="Color">Ener</span>Green</h2>
+                </div>
+            </div>
+            <div class="Navigation-buttons">
+                <div class="Dashbtn">
+                    <li>
+                        <a href="{{ url_for('AdminDashboard') }}" class="nav-button">
+                            <img id="homeicon" src="../static/images/svg/Home-Icon.svg" alt="Dashboard Icon" width="24" height="24"> Dashboard
+                        </a>
+                    </li>
+                </div>
+
+                <div class="Dashbtn">
+                    <li>
+                        <a href="{{ url_for('UserManagement') }}" class="nav-button">
+                            <img src="../static/images/svg/useric.svg" alt="Dashboard Icon" width="24" height="24"> User Management
+                        </a>
+                    </li>
+                </div>
+
+            </div>
+            <img id="side-img" src="../static/images/png/sidebotimg.png" alt="" width="208">
+        </div>
+        <div class="Top-Main-Content">
+            <div class="Top-Navigation">
+                <div class="page-title">
+                    <h2 id="dash-title">Admin Dashboard</h2>
+                </div>
+
+                <div class="profile-section" onclick="toggleDropdown()">
+                    <a href="#">
+                        <img src="../static/images/svg/profilenako.svg" alt="">
+                        <div class="name-status">
+                            <span id="user-name">{{ fullname }}</span> <br>
+                            <p>Admin</p>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu" id="profile-dropdown">
+                        <a id="settings" href="#"> <img src="../static/images/svg/settingsicon.svg" alt="" width="10" height="10"> Settings</a>
+                        <a href="{{ url_for('logout') }}"> <img src="../static/images/svg/logouticon.svg" alt=""  width="24" height="24"> Logout</a>
+                    </div>
+                </div>
+                
+
+            </div>
+            {%  block content %}
+            {% endblock %}
+
+            </div>
+        </div>
+    </div>
+</body>
+</html>

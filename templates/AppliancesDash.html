@@ -1,0 +1,123 @@
+{% extends 'UserDashboardTemplate.html'%}
+{% block content %}
+<style>
+    #appliance-page-container {
+        height: 800px; /* Total height of the container */
+        background-color: white;
+        display: flex;
+        flex-direction: column; /* Stack elements vertically */
+    }
+    
+    #top-section {
+        height: 15%; /* 1/4 of the container */
+        border-bottom: 3px solid gray;
+        padding-top: 15px;
+        padding-left: 15px;
+        padding-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    #chart-section {
+        height: 105%; /* 3/4 of the container */
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+</style>
+<div id="appliance-page-container" style="height: 700px; background-color: white;">
+    <!-- Top Section -->
+    <div id="top-section" style="height: 10%;">
+        <div class="labels">
+            <ul>
+                <div class="label-item">
+                    <li>
+                        <div class="label-text">
+                            TOTAL KWH CONSUMPTION OF APPLIANCES/WEEK
+                        </div>
+                        <div class="percentage" style="color: rgb(230, 161, 32);font-size:30px;">{{sum_appliances_consumption}} KWH</div>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </div>
+    <!-- Chart Section -->
+    <div id="chart-section" style="height: 90%; background-color: white; display: flex; align-items: center; justify-content: center;">
+        <canvas id="appliancesBarChart"></canvas>
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        renderApplianceCharts();      
+    };
+
+    function renderApplianceCharts() {
+        const xValues = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        const data = {{ appliances_sorted_consumption_data | tojson }};
+    
+        const datasets = [];
+        const colors = [
+            "rgba(48,185,56,0.7)", // Green
+            "rgba(75,192,192,0.7)", // Blue
+            "rgba(153,102,255,0.7)", // Purple
+            "rgba(255,159,64,0.7)", // Orange
+            "rgba(255,99,132,0.7)"  // Red
+        ];
+    
+        let colorIndex = 0;
+    
+        for (const [label, values] of Object.entries(data)) {
+            datasets.push({
+                label: label,
+                data: values,
+                backgroundColor: colors[colorIndex % colors.length],
+                borderColor: colors[colorIndex % colors.length].replace('0.7', '1'),
+                borderWidth: 1,
+            });
+            colorIndex++;
+        }
+    
+        new Chart("appliancesBarChart", {
+            type: "bar",
+            data: {
+                labels: xValues,
+                datasets: datasets,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: "top",
+                        labels: {
+                            generateLabels: function(chart) {
+                                const labels = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                labels.forEach(label => {
+                                    const dataset = chart.data.datasets[label.datasetIndex];
+                                    const total = dataset.data.reduce((a, b) => a + b, 0); // Calculate the total for the dataset
+                                    label.text += ` (${total.toFixed(2)}KWH)`; // Append the total to the label
+                                });
+                                return labels;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        stacked: false,
+                    },
+                    y: {
+                        stacked: false,
+                    },
+                },
+            },
+        });        
+    }
+    
+</script>
+{% endblock %}

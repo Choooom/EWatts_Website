@@ -1,0 +1,565 @@
+{% macro flash_messages() -%}
+{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+		{% for category, message in messages %}
+			{% if category == 'info' or category =='success' %}
+				<div class="w3-panel w3-bar w3-large w3-green w3-display-topmiddle w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+					<span align="center">{{ message }}</span>
+					<span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
+				</div>
+			{% elif category == 'error' %}
+				<div class="w3-panel w3-bar w3-large w3-red w3-display-topmiddle w3-margin-top w3-padding w3-animate-zoom" style="width:50%;margin:auto">
+					<span align="center">{{ message }}</span>
+					<span onclick="this.parentElement.style.display='none'" class="w3-button w3-large w3-small w3-display-topright">&times;</span>
+				</div>
+			{% endif %}
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+{%- endmacro %}
+
+{% macro showloginmodal() -%}
+<div id="loginmodal" class="w3-modal w3-mobile">
+    <div class="w3-modal-content w3-animate-zoom w3-mobile w3-round-xxlarge">
+        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:75vh">
+            <div class="w3-half w3-left">
+                <div id="hello">
+                    <p id="welcome">Welcome to</p>              
+                    <div id="logodesu" >
+                        <img src="{{ url_for('static',filename='images/logo/logo-name.svg') }}" alt="Logo" class="Energreen-logo">
+                    </div> 
+                    <div class="welcome-message">
+                        <p>Log in to start tracking your energy and start making a difference</p>
+                    </div>
+                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 350px; height: 350px; object-fit: contain;padding-right:1em">
+                </div>
+            </div>
+            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:75vh">
+                <span onclick="document.getElementById('loginmodal').style.display='none'"
+                class="w3-button w3-round-xxlarge w3-display-topright w3-xlarge">&times;</span>
+                <h1 class="w3-center w3-padding-top" id="login" style="font-family: 'Poppins', sans-serif;">Log in</h1>
+                <form class="w3-row-padding" method='POST' action="/userlogin">
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">EMAIL</label>
+                            <input type="text" name="email" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">PASSWORD</label>
+                            <input type="password" name="password" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div class="w3-panel w3-center w3-padding-top w3-mobile">
+                        <p class="w3-center">
+                            <input type="submit" value="LOGIN" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:73%;background-color:#30B938;color:white">
+                        </p>
+                    </div>
+                    <div class="w3-center w3-mobile">
+                        <p class="w3-center">
+                            <span class="w3-button w3-white w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:70%;"><img src="{{ url_for('static', filename='images/png/googleLogo30by30NBG.png') }}" alt="Google Logo" style="max-width:30px;height:30px;color:#30B938"><a href="{{ url_for('login') }}" style="text-decoration: none;color:#0D2535">  Sign-in using Google</a></span>
+                        </p>
+                    </div>
+                </form>
+                <div class="signin">
+                    <p class="w3-center">Don't have an account? <span id="signin" onclick="document.getElementById('loginmodal').style.display='none'"><a id="signspan" onclick="showModal('registermodal')">Sign in</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>     
+</div>
+{%- endmacro %}
+
+
+{% macro showregistermodal() -%}
+<div id="registermodal" class="w3-modal w3-mobile">
+    <div class="w3-modal-content w3-animate-zoom w3-mobile w3-round-xxlarge">
+        <div class="w3-container w3-mobile" style="margin:0;padding:0;height:75vh">
+            <div class="w3-half w3-left">
+                <div id="hello">
+                    <p id="welcome">Welcome to</p>              
+                    <div id="logodesu" >
+                        <img src="{{ url_for('static',filename='images/logo/logo-name.svg') }}" alt="Logo" class="Energreen-logo">
+                    </div> 
+                    <div class="welcome-message">
+                        <p>Register to start tracking your energy and start making a difference</p>
+                    </div>
+                    <img src="{{ url_for('static',filename='images/png/greenElipseLogin.png') }}" alt="Green Elipse" style="width: 350px; height: 350px; object-fit: contain;padding-right:2em">
+                </div>
+            </div>
+            <div class="w3-half w3-right w3-padding-large w3-round-xxlarge" style="background-color: #0D2535; color:white;height:75vh">
+                <span onclick="document.getElementById('registermodal').style.display='none'"
+                class="w3-button w3-round-xxlarge w3-display-topright w3-xlarge">&times;</span>
+                <p class="w3-center w3-padding-top" id="login" style="font-family: 'Poppins', sans-serif;font-size:2em">Create Account</p>
+                <form class="w3-row-padding" action="/userregister" method="POST">
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">FULL NAME</label>
+                            <input id="fullname" type="text" name="fullname" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">EMAIL</label>
+                            <input id="email" type="text" name="email" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div>
+                        <p>
+                            <label style="font-size: 0.9em;">PASSWORD</label>
+                            <input id="password" type="password" name="password" class="w3-input w3-border w3-round-large" required>
+                        </p>
+                    </div>
+                    <div class="w3-panel w3-center w3-padding-top w3-mobile">
+                        <p class="w3-center">
+                            <button type="submit" class="w3-button w3-round-xxlarge w3-large w3-padding-16 w3-mobile" style="width:73%;background-color:#30B938;color:white">
+                                SIGN-UP
+                            </button>
+                        </p>
+                    </div>
+                </form>
+                
+                <div class="signin">
+                    <p class="w3-center">Already have an account? <span id="signin" onclick="document.getElementById('registermodal').style.display='none'"><a id="signspan" onclick="showModal('loginmodal')">Log in</a></span></p>
+                </div>
+            </div>
+        </div>
+    </div>     
+</div>
+{%- endmacro %}
+
+{% macro showsetupAppliancesModal(appliances) -%}
+<div id="setupAppliancesModal" class="w3-modal w3-mobile" style="display: block;">
+    <div class="w3-modal-content w3-animate-left w3-round" style="width: 45%;">
+        <div id="setup-page-popup" class="setup-popup" style="display: block;">
+            <div class="setup-content">
+                <div class="setuphead">
+                    <h1>Setup Virtual Appliances</h1>
+                    <p id="setuptext">
+                        "Select from a wide range of essential and innovative appliances used within your home 
+                        to enhance comfort, convenience, and efficiency"
+                    </p>
+                </div>
+
+                <!-- Sort Dropdown -->
+                <div class="sortbtn">
+                    <div class="w3-dropdown-click w3-border w3-border-black w3-round-xxlarge">
+                        <button onclick="toggleDropdown()" class="w3-button">
+                            Sort By <img src="../static/images/svg/sortvec.svg" alt="sort btn" style="width: 10px;height:10px">
+                        </button>
+                        <div id="Demo" class="w3-dropdown-content w3-bar-block w3-border w3-border-black w3-hide">
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('all')">All</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Heating')">Heating</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Lighting')">Lighting</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Entertainment')">Entertainment</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Cooling')">Cooling</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Household')">Household</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('PersonalCare')">Personal Care</a>
+                            <a href="#" class="w3-bar-item w3-button" onclick="sortByCategory('Cooking')">Cooking</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Appliance List Form -->
+                <div class="selectAppliances" style="z-index: 0;">
+                    <form id="appliances-shelf" action="/setupAppliances" method="POST">
+                        {% for category, items in appliances.items() %}
+                            {% for item in items %}
+                                <div class="app {{ category }}">  <!-- Add the category as a class -->
+                                    <input type="checkbox" name="mycheckbox" value="{{ item }}" required>
+                                    <p>{{ item }}</p>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+                    </form>
+                </div>
+
+                <!-- Confirm Button -->
+                <div class="confirmbtn">
+                    <button type="button" id="submit-btn" class="confirm-btn">CONFIRM</button>
+                </div>
+                
+                <img id="solarbg" src="../static/images/png/SolarPanelBg.png" alt="set up page bg">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    // Toggle dropdown visibility
+    function toggleDropdown() {
+        const dropdown = document.getElementById("Demo");
+        dropdown.classList.toggle("w3-show");
+    }
+
+    // Filter appliances by category with a flex layout
+    function sortByCategory(category) {
+        const allAppliances = document.querySelectorAll('.app');
+
+        // Reset and show all appliances if 'All' is selected
+        if (category.toLowerCase() === 'all') {
+            allAppliances.forEach(app => {
+                app.style.display = 'flex'; // Maintain flex layout for proper alignment
+            });
+            return;
+        }
+
+        // Filter appliances based on selected category
+        allAppliances.forEach(app => {
+            if (app.classList.contains(category)) {
+                app.style.display = 'flex'; // Show matching category items, maintaining alignment
+            } else {
+                app.style.display = 'none'; // Hide non-matching items
+            }
+        });
+    }
+
+    // Trigger form submission on button click with error-trapping
+    document.getElementById('submit-btn').addEventListener('click', function (event) {
+        // Prevent default form submission
+        event.preventDefault();
+        
+        // Count the number of checked checkboxes
+        const checkedCount = document.querySelectorAll('input[name="mycheckbox"]:checked').length;
+        
+        // If less than 10 checkboxes are selected, show SweetAlert error
+        if (checkedCount < 10) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Selection Error',
+                text: 'Please select at least 10 appliances before proceeding.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            // If 10 or more checkboxes are selected, submit the form
+            document.getElementById('appliances-shelf').submit();
+        }
+    });
+</script>
+
+{%- endmacro %}
+
+{% macro showPanelsModal() -%}
+<div id="setupAppliancesModal" class="w3-modal w3-mobile" style="display: block;">
+    <div class="w3-modal-content w3-animate-left w3-round" style="width: 45%;">
+        <div id="setup-page-popup" class="setup-popup" style="display: block;">
+            <div class="setup-content">
+                <div class="setuphead">
+                    <h1>Pick Your Desired Solar Panel</h1>
+                    <p id="setuptext">"Select your ideal solar panel and watch you energy potential soar-let's simulate your journey 
+                        to sustainable power!"</p>
+                </div>
+                <div class="SelectSolarPanel">
+                
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="monocrystaline">
+                        <div class="solarname-switch">
+    
+                            <div class="solarname">
+                                <p>Monocrystalline Solar Panels</p>
+                            </div>
+    
+                            <div id="switch"> 
+                                <label class="switch">
+                                    <input type="checkbox" name="solarpanels" value="monocrystalline" class="solarSwitch">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+    
+                        </div>
+                        <div id="solardesc">
+                            <p>Higly efficient, sleek back panels with a single crystal structure</p>
+                        </div>
+    
+                        <div class="solarinfo-specifications">
+                            <p id="sinf" >Solar Panel Information</p>
+                            <p id="specs" >Specifications</p>
+                            <hr>
+                            <div id="watt"> 
+                                <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p id="wew1">Watt Capacity</p>
+                                    <p id="wew">Maximum of 400 Watts</p>
+                                </div>
+                            </div>
+                            
+                            <div id="efficiency"> 
+                                <div id="efficon"><img src="../static/images/svg/efficon.svg" style="width:2.3em;height:1.9em;object-fit:contain" alt="Effeciency Icon"></div>
+                                <div id="wattcap">
+                                    <p id="wew1"> Efficiency</p>
+                                    <p id="wew">Average Efficiency of 20%</p>
+                                </div>
+                            </div>
+    
+                            <div id="tempt">
+                                <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p id="wew1">Optimal Temperature</p>
+                                    <p id="wew">Optimal Temperature of 25°c</p>
+                                </div>
+    
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <div class="quandiv">
+                                <div class="Q">
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity1" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity1')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity1')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
+                                </div>
+                            </div>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+    
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="polycrystaline">
+                        <div class="solarname-switch">
+    
+                            <div class="solarname">
+                                <p>Polycrystalline Solar Panels</p>
+                            </div>
+    
+                            <div id="switch"> 
+                                <label class="switch">
+                                    <input type="checkbox" name="solarpanels" value="polycrystalline" class="solarSwitch">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+    
+                        </div>
+                        <div id="solardesc">
+                            <p>Cost-effective bluish panels mades from mutiple crystal structures</p>
+                        </div>
+    
+                        <div class="solarinfo-specifications">
+                            <p id="sinf" >Solar Panel Information</p>
+                            <p id="specs" >Specifications</p>
+                            <hr>
+                            <div id="watt"> 
+                                <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p id="wew1">Watt Capacity</p>
+                                    <p id="wew">Maximum of 360 Watts</p>
+                                </div>
+                            </div>
+                            
+                            <div id="efficiency"> 
+                                <div id="efficon"><img src="../static/images/svg/efficon.svg" style="width:2.3em;height:1.9em;object-fit: contain;" alt="Effeciency Icon"></div>
+                                <div id="wattcap">
+                                    <p id="wew1">Efficiency</p>
+                                    <p id="wew">Average Efficiency of 16%</p>
+                                </div>
+                            </div>
+    
+                            <div id="tempt">
+                                <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p id="wew1">Optimal Temperature</p>
+                                    <p id="wew">Optimal Temperature of 25°c</p>
+                                </div>
+    
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <div class="quandiv">
+                                <div class="Q">
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity2" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity2')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity2')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
+                                </div>
+                            </div>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+    
+                    <form class="solarpaneldiv" action='/setupPanels' method='POST' id="thinfilm">
+                        <div class="solarname-switch">
+    
+                            <div class="solarname">
+                                <p>Thin-Film Solar Panels</p>
+                            </div>
+    
+                            <div id="switch"> 
+                                <label class="switch">
+                                    <input type="checkbox" name="solarpanels" value="thin-film" class="solarSwitch">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>    
+                        </div>
+                        <div id="solardesc">
+                            <p>Lightweight and flexible panels, suitbale for various applications</p>
+                        </div>
+    
+                        <div class="solarinfo-specifications">
+                            <p id="sinf" >Solar Panel Information</p>
+                            <p id="specs" >Specifications</p>
+                            <hr>
+                            <div id="watt"> 
+                                <div id="watticon"><img src="../static/images/svg/watticon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p class="watc" id="wew1">Watt Capacity</p>
+                                    <p id="wew">Maximum of 300 Watts</p>
+                                </div>
+                            </div>
+                            
+                            <div id="efficiency"> 
+                                <div id="efficon"><img src="../static/images/svg/efficon.svg"style="width:2.3em;height:1.9em;object-fit: contain;" alt="Effeciency Icon"></div>
+                                <div id="wattcap">
+                                    <p id="wew1">Efficiency</p>
+                                    <p id="wew">Average Efficiency of 11%</p>
+                                </div>
+                            </div>
+    
+                            <div id="tempt">
+                                <div id="watticon"><img src="../static/images/svg/opicon.svg" alt=""> </div>
+                                <div id="wattcap">
+                                    <p id="wew1">Optimal Temperature</p>
+                                    <p id="wew">Optimal Temperature of 25°c</p>
+                                </div>
+    
+                            </div>
+                        </div>
+                        <div class="bottom">
+                            <div class="quandiv">
+                                <div class="Q">
+                                    <p>Quantity:</p>
+                                    <input type="text" value="1" name="quantity" id="quantity3" style="width: 20%;" class="w3-bar-item w3-input w3-border" readonly>
+                                    <button type="button" onclick="increaseQuantity('quantity3')" class="w3-bar-item w3-margin-right w3-margin-left w3-button w3-circle w3-green">+</button>
+                                    <button type="button" onclick="decreaseQuantity('quantity3')" class="w3-bar-item w3-button w3-circle w3-border w3-border-green">-</button>
+                                </div>
+                            </div>
+                            <div class="w3-center w3-margin-top">
+                                <button type="submit" class="w3-round-xlarge w3-padding" style="background-color: #30B938;color:white;width:50%">
+                                    CONFIRM
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>            
+                <img id="solarbg" src="../static/images/png/SolarPanelBg.png" alt="set up page bg">
+            </div>
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro showTariffModal()-%}
+<div  class="w3-modal" style="display: block;">
+    <div class="w3-modal-content w3-round-xxlarge w3-animate-zoom" style="width:35%;background-image:url('../static/images/png/TariffPage.png');object-fit:contain;">
+        <div class="tariff-content">
+            <div class="TariffHead">
+                <h1>Energy Tariffs</h1>
+            </div>
+            <div id="tariffCaption" class="w3-center">
+                <p>Input Energy Providers and their respective rates</p>
+            </div>
+            <!-- Dropdowns section -->
+            <form id="tariffForm" class="dropdown-section">
+                <div class="dropdown">
+                    <label id="lab" for="provider1">Energy Provider</label>
+                    <div class="select-wrapper">
+                        <select id="provider1">
+                            <option value="" disabled selected>Select Energy Provider</option>
+                            <option value="MERALCO" >MERALCO (Manila Electric)</option>
+                            <option value="VECO" >VECO (Visayan Electric Company)</option>
+                            <option value="TORECO" >TORECO (Toledo City Electric Company)</option>
+                            <option value="CEBECO" >CEBECO (Cebu Electric Cooperative)</option>
+                            <option value="Aboitiz" >Aboitiz Power Corporation</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg"  alt=""> </span>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <label id="lab" for="provider2">Tariff Rate</label>
+                    <div class="select-wrapper">
+                        <select id="provider2">
+                            <option value="" disabled selected>Select Tariff Rate</option>
+                            <option value="10" >₱ 10/kwH (average)</option>
+                            <option value="12" >₱ 12/kwH (highest)</option>
+                            <option value="8" >₱ 8/kwH (lowest)</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg" alt=""> </span>
+                    </div>
+                </div>
+
+                <div class="dropdown">
+                    <label id="lab" for="provider3">Type of Tariff</label>
+                    <div class="select-wrapper">
+                        <select id="provider3">
+                            <option value="" disabled selected>Select Type of Tariff</option>
+                            <option value="Fixed Rate" >Fixed Rate</option>
+                        </select>
+                        <span class="dropdown-icon"> <img src="../static/images/svg/drdown-icon.svg" alt=""> </span>
+                    </div>
+                </div>
+            </form>  
+        </div>
+        <div class="w3-center w3-padding w3-padding-bottom" id="doneTariffBTN">
+            <button id="submitBtn" class="w3-green w3-round-xxlarge w3-padding-large w3-xlarge" style="width: 35%;cursor:pointer">
+                DONE
+            </button>
+        </div>  
+    </div>   
+</div>
+<script>
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+        // Get form values
+        const provider1 = document.getElementById('provider1').value;
+        const provider2 = document.getElementById('provider2').value;
+        const provider3 = document.getElementById('provider3').value;
+
+         // Validate if all dropdowns are selected
+         if (!provider1 || !provider2 || !provider3) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Selection Error',
+                text: 'Please select all fields before proceeding.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+            return; // Stop execution if validation fails
+        }
+
+        // Prepare the data to send
+        const data = {
+            provider: provider1,
+            tariff_rate: provider2,
+            tariff_type: provider3
+        };
+
+        // Send data to the Flask backend
+        try {
+            const response = await fetch('/submit_tariff', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+
+            // Check for the redirect URL in the response and navigate
+            if (result.redirect) {
+                window.location.href = result.redirect;
+            } else {
+                alert("An error occurred. Please try again.");
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to submit the form');
+        }
+    });
+</script>
+{%- endmacro %}

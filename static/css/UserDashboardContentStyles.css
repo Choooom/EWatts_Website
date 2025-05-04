@@ -1,0 +1,168 @@
+.topdiv {
+    width: 100%;
+    height: 15vh;
+    background-color: #002c4c;
+    margin: 10px;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.day {
+    width: 12.9%;
+    height: 14vh;
+    background-color: #ffff;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.rotated-text {
+    transform: rotate(270deg);
+    text-orientation: upright;
+    font-weight: bold;
+    align-items: center;
+    font-size: 17px;
+}
+
+#numbers {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+    color: #30B938;
+}
+
+.statistics {
+    width: 98.3%;
+    height: 70vh;
+    background-color: #002c4c;
+    margin: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+}
+
+.Estimation-Appliances,
+.Emissions {
+    height: 100%;
+    background-color: #002c4c;
+    border-radius: 20px;
+}
+
+.Estimation-Appliances {
+    width: 35%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.Cost-Emission,
+.Appliances {
+    height: 49.2%;
+    width: 100%;
+    background-color: #ffff;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.Appliances{
+    position: relative;
+}
+
+.Emissions {
+    width: 65%;
+    height: 90%;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.Energy-Emission,
+.Carbon-Emission {
+    width: 50%;
+    height: 100%;
+    background-color: #ffff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#myPieChart, 
+#myDoughnutChart,
+#myGreenChart,
+#myCarbonChart {
+    width: 73% !important; /* Adjust based on your layout */
+    margin-left: 0 !important;
+    height: 55% !important; /* Adjust based on your layout */
+    margin: 0 !important;
+    padding-bottom: 5px;
+}
+
+.labels ul {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 0;
+    margin-top: 1em;
+    position: relative;
+    bottom: 15%;
+}
+
+.label-item {
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+
+.label-item li {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    font-size: 15px;
+    margin: 0;
+}
+
+.bullet {
+    font-size: 20px;
+    padding-right: 5px;
+}
+
+.orange {
+    color: #F4BE37;
+}
+
+.blue {
+    color: #FF9F40;
+}
+
+.orange-red {
+    color: #0D2535;
+}
+
+.red {
+    color: #5388D8;
+}
+
+.percentage {
+    font-weight: bold;
+    font-size: 15px;
+    padding-left: 5px;
+}
+#App-sect, #Cost-sect{
+    margin-right: 20em;
+}
+#emit{
+    height: 19px;
+    margin: 19px;
+    padding: 0;
+    margin-left: 10px;
+}
